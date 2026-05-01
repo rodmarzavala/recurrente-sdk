@@ -435,6 +435,138 @@ Returns `false` (never throws) on invalid input, missing headers, or expired eve
 
 ---
 
+---
+
+## `recurrente.account`
+
+### `.retrieve()` → `Promise<AccountDetails>`
+
+Obtén información sobre tu cuenta de Recurrente.
+
+```typescript
+const account = await recurrente.account.retrieve();
+console.log(account.name, account.account_type);
+```
+
+---
+
+## `recurrente.test`
+
+### `.credentials()` → `Promise<TestResponse>`
+
+Prueba tus credenciales de autenticación. Útil para validar que tus llaves están correctas.
+
+```typescript
+const test = await recurrente.test.credentials();
+console.log(test.message); // "Hello La Surf Office 🌎"
+```
+
+---
+
+## `recurrente.transfers`
+
+### `.create(data)` → `Promise<Transfer>`
+
+Envía dinero desde tu cuenta a otra cuenta de Recurrente.
+
+```typescript
+const transfer = await recurrente.transfers.create({
+  amount_in_cents: 10000,   // Q100.00
+  currency:        "GTQ",
+  recipient_id:    "recurrente" // handle (@) de la cuenta destinataria
+});
+```
+
+---
+
+## `recurrente.users`
+
+### `.create(data)` → `Promise<User>`
+
+Crea un usuario que puede ser asociado a checkouts.
+
+```typescript
+const user = await recurrente.users.create({
+  email: "cliente@ejemplo.com"
+});
+```
+
+---
+
+## `recurrente.terminalSessionCommands`
+
+### `.create(data)` → `Promise<TerminalSessionCommand>`
+
+Envía un comando de cobro a una terminal POS.
+
+```typescript
+const command = await recurrente.terminalSessionCommands.create({
+  terminal_id:     "trm_abc123",
+  external_id:     "order-1234", // Idempotency key
+  amount_in_cents: 5000,
+  currency:        "GTQ"
+});
+console.log(command.checkout_url);
+```
+
+---
+
+## `recurrente.paymentIntents`
+
+### `.update(id, data)` → `Promise<PaymentIntent>`
+
+Adjunta una URL de factura fiscal a un payment intent exitoso.
+
+```typescript
+const updated = await recurrente.paymentIntents.update("pa_123", {
+  payment_intent: {
+    tax_invoice_url: "https://facturas.com/fac_123.pdf"
+  }
+});
+```
+
+---
+
+## `recurrente.coupons`
+
+### `.list(params?)` → `Promise<Page<Coupon>>`
+
+```typescript
+const page = await recurrente.coupons.list();
+```
+
+### `.retrieve(id)` → `Promise<Coupon>`
+
+```typescript
+const coupon = await recurrente.coupons.retrieve("coup_abc123");
+```
+
+### `.create(data)` → `Promise<Coupon>`
+
+```typescript
+const coupon = await recurrente.coupons.create({
+  name: "VERANO25",
+  discount_mode: "code",
+  amount_off_in_cents: 1500
+});
+```
+
+### `.update(id, data)` → `Promise<Coupon>`
+
+```typescript
+const updated = await recurrente.coupons.update("coup_abc123", {
+  display_name: "Promo Verano"
+});
+```
+
+### `.archive(id)` → `Promise<void>`
+
+```typescript
+await recurrente.coupons.archive("coup_abc123");
+```
+
+---
+
 ## Error Handling
 
 All methods throw `RecurrenteError` on non-2xx responses.
