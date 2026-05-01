@@ -1,17 +1,22 @@
 # @rodmarzavala/recurrente-sdk
 
-**SDK no oficial de TypeScript para la API REST de [Recurrente](https://recurrente.com).**  
-Zero dependencias · Edge & Serverless · Completamente tipado
+**SDK no oficial de TypeScript para la API REST de [Recurrente](https://recurrente.com) 🇬🇹**  
+Hecho en Guatemala para developers guatemaltecos — y para cualquiera que quiera cobrar en quetzales.
 
 [![npm version](https://img.shields.io/npm/v/@rodmarzavala%2Frecurrente-sdk?color=4f46e5&style=flat-square)](https://www.npmjs.com/package/@rodmarzavala/recurrente-sdk)
 [![npm downloads](https://img.shields.io/npm/dm/@rodmarzavala%2Frecurrente-sdk?color=4f46e5&style=flat-square)](https://www.npmjs.com/package/@rodmarzavala/recurrente-sdk)
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f46e5?style=flat-square)](./LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/rodmarzavala/recurrente-sdk/ci.yml?label=CI&style=flat-square)](https://github.com/rodmarzavala/recurrente-sdk/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-4f46e5?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Hecho en Guatemala](https://img.shields.io/badge/Hecho%20en-Guatemala%20%F0%9F%87%AC%F0%9F%87%B9-4f46e5?style=flat-square)](https://recurrente.com)
+
+> 🇵🇬 **Documentación en español e inglés:** [rodmarzavala.github.io/recurrente-sdk](https://rodmarzavala.github.io/recurrente-sdk/)
 
 ---
 
 ## ¿Por qué este SDK?
+
+Recurrente es la plataforma de pagos y suscripciones líder en Guatemala. Este SDK te da acceso a toda su API desde TypeScript/JavaScript con una experiencia de desarrollo de primer nivel — sin peleas con `fetch` crudo, sin cobros dobles, sin webhooks inseguros.
 
 | Feature | Detalle |
 |---------|---------|

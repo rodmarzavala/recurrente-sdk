@@ -1,7 +1,7 @@
 {
   "name": "@rodmarzavala/recurrente-sdk",
   "version": "0.2.0",
-  "description": "TypeScript SDK for the Recurrente REST API — Edge/Serverless compatible, zero runtime deps",
+  "description": "TypeScript SDK para la API de Recurrente — la pasarela de pagos y suscripciones de Guatemala. Zero deps, Edge-first, compatible con Next.js, Astro y Cloudflare Workers.",
   "author": "Rodmar Zavala <info@rodmarzavala.com>",
   "license": "MIT",
   "repository": {
@@ -54,13 +54,27 @@
   },
   "keywords": [
     "recurrente",
+    "recurrente-sdk",
+    "recurrente-api",
+    "pagos",
+    "pagos-guatemala",
+    "pasarela-de-pagos",
+    "cobros",
+    "suscripciones",
+    "quetzal",
+    "GTQ",
+    "guatemala",
+    "fintech-guatemala",
     "payments",
+    "payment-gateway",
+    "subscriptions",
     "sdk",
     "typescript",
     "edge",
     "serverless",
     "cloudflare-workers",
-    "guatemala",
+    "nextjs",
+    "astro",
     "fintech"
   ]
 }
