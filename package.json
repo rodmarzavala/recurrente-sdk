@@ -1,6 +1,6 @@
 {
   "name": "@rodmarzavala/recurrente-sdk",
-  "version": "0.3.2",
+  "version": "1.0.0",
   "description": "TypeScript SDK para la API de Recurrente — la pasarela de pagos y suscripciones de Guatemala. Zero deps, Edge-first, compatible con Next.js, Astro y Cloudflare Workers.",
   "author": "Rodmar Zavala <info@rodmarzavala.com>",
   "license": "MIT",
