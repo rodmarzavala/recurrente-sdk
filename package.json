@@ -44,6 +44,9 @@
     "format": "prettier --write 'src/**/*.ts' 'docs/**/*.md'",
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
+  "vitest": {
+    "setupFiles": ["./tests/setup.ts"]
+  },
   "devDependencies": {
     "@types/node": "^20.12.12",
     "tsx": "^4.11.0",
