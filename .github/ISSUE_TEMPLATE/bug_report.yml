@@ -1,0 +1,88 @@
+name: 🐛 Bug Report
+description: Something isn't working as expected
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections below.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: "When I call `recurrente.checkouts.create(...)`, I get..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: |
+        Paste the **smallest possible** code snippet that reproduces the issue.
+        Remove any real API keys before posting.
+      render: typescript
+      placeholder: |
+        import { Recurrente } from "recurrente-sdk";
+
+        const client = new Recurrente({ publicKey: "pk_test_...", secretKey: "sk_test_..." });
+        // ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      placeholder: "I expected the SDK to return..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Include the full error message / stack trace if available.
+    validations:
+      required: true
+
+  - type: input
+    id: sdk-version
+    attributes:
+      label: SDK version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runtime
+    attributes:
+      label: Runtime
+      options:
+        - Node.js
+        - Deno
+        - Bun
+        - Cloudflare Workers
+        - Vercel Edge Functions
+        - Browser
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: runtime-version
+    attributes:
+      label: Runtime version
+      placeholder: "Node.js 20.12.0"
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate
+          required: true
+        - label: I removed all real API keys from the reproduction
+          required: true

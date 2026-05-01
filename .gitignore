@@ -1,0 +1,11 @@
+.env
+node_modules/
+dist/
+*.tsbuildinfo
+
+# VitePress build output
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# Internal — not for public consumption
+PUBLISHING.md

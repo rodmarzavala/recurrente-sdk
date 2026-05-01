@@ -1,0 +1,101 @@
+# Recurrente SDK (v0.2.0)
+
+> This document is optimized for LLMs and AI code assistants (Cursor, Copilot, Claude, etc.) to understand the `@rodmarzavala/recurrente-sdk` context.
+
+## Overview
+- **Package:** `@rodmarzavala/recurrente-sdk`
+- **Purpose:** Official-grade TypeScript SDK for the Recurrente REST API (Guatemala payment gateway).
+- **Architecture:** Zero runtime dependencies. Uses native `fetch` and Web Crypto API (`crypto.subtle`).
+- **Runtimes:** Fully compatible with Node.js ≥ 18, Cloudflare Workers, Vercel Edge, Deno, and Bun.
+- **Typing:** Strict TypeScript (`noImplicitAny`). All endpoints have explicit Request/Response interfaces.
+- **Resilience:** Built-in exponential backoff retries for HTTP 429/5xx, auto-generated UUID `Idempotency-Key` to prevent duplicate charges, and `AbortController` based timeouts.
+
+## Initialization
+
+```typescript
+import { Recurrente } from "@rodmarzavala/recurrente-sdk";
+
+// Initialize once and share across your app
+const recurrente = new Recurrente({
+  publicKey: process.env.RECURRENTE_PUBLIC_KEY!, // pk_live_... or pk_test_...
+  secretKey: process.env.RECURRENTE_SECRET_KEY!, // sk_live_... or sk_test_...
+});
+```
+
+## Available Modules
+
+The SDK groups endpoints into modules accessible via the client instance:
+
+1. `recurrente.checkouts` - Create and manage payment sessions.
+2. `recurrente.products` - Create and manage catalog products.
+3. `recurrente.customers` - Manage customer profiles.
+4. `recurrente.subscriptions` - Create and manage recurring subscriptions.
+5. `recurrente.refunds` - Process full or partial refunds.
+6. `recurrente.webhookEndpoints` - Manage where webhooks are delivered.
+
+### Example: Creating a Checkout
+
+```typescript
+const checkout = await recurrente.checkouts.create({
+  items: [
+    {
+      name: "Suscripción Premium",
+      amount_in_cents: 9900, // Q99.00
+      currency: "GTQ",
+      quantity: 1,
+    },
+  ],
+  success_url: "https://yourdomain.com/gracias",
+  cancel_url: "https://yourdomain.com/cancelar",
+  customer_email: "cliente@ejemplo.com", // optional
+});
+
+console.log(checkout.checkout_url);
+```
+
+### Example: Pagination
+
+All `.list()` methods return a `Page<T>` object based on RFC 8288. You should use the provided helpers `pageIterator` or `autoPagingToArray` for seamless iteration.
+
+```typescript
+import { pageIterator, autoPagingToArray } from "@rodmarzavala/recurrente-sdk";
+
+// Async generator
+for await (const page of pageIterator((p) => recurrente.products.list(p))) {
+  page.data.forEach((prod) => console.log(prod.name));
+}
+
+// Flat array (e.g. max 100 items)
+const allProducts = await autoPagingToArray(
+  (p) => recurrente.products.list(p), 
+  { limit: 100 }
+);
+```
+
+## Webhooks
+
+Webhook verification uses the Web Crypto API, making it Edge-compatible.
+
+```typescript
+import { RecurrenteWebhooks } from "@rodmarzavala/recurrente-sdk";
+
+// req.rawBody must be the unparsed string body
+const isValid = await RecurrenteWebhooks.verifySignature(
+  req.rawBody,
+  {
+    "svix-id": req.headers["svix-id"],
+    "svix-timestamp": req.headers["svix-timestamp"],
+    "svix-signature": req.headers["svix-signature"],
+  },
+  process.env.RECURRENTE_WEBHOOK_SECRET!
+);
+
+if (!isValid) throw new Error("Invalid signature");
+```
+
+## AI Agent Rules for using this SDK:
+1. Always use `amount_in_cents` (integers) for money. Q5.00 is `500`.
+2. Do not install `crypto` or `axios`. The SDK handles HTTP and crypto natively.
+3. When creating a product via `products.create()`, you MUST pass at least one price in the `prices_attributes` array.
+4. Catch `RecurrenteError`. It contains `.statusCode`, `.message`, and `.errors` map.
+5. All mutating operations (`POST`, `PUT`, `DELETE`) are automatically idempotent. Do not manually generate idempotency keys unless specifically requested by the user.

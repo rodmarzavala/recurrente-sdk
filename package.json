@@ -1,0 +1,66 @@
+{
+  "name": "@rodmarzavala/recurrente-sdk",
+  "version": "0.2.0",
+  "description": "TypeScript SDK for the Recurrente REST API — Edge/Serverless compatible, zero runtime deps",
+  "author": "Rodmar Zavala <info@rodmarzavala.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rodmarzavala/recurrente-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rodmarzavala/recurrente-sdk/issues"
+  },
+  "homepage": "https://github.com/rodmarzavala/recurrente-sdk#readme",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "test:integration": "node --env-file=.env --import tsx/esm scripts/integration-test.ts",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "lint": "eslint src/ --ext .ts",
+    "format": "prettier --write 'src/**/*.ts' 'docs/**/*.md'",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "tsx": "^4.11.0",
+    "typescript": "^5.4.5",
+    "vitepress": "^1.6.4",
+    "vitest": "^1.6.0",
+    "vue": "^3.5.33"
+  },
+  "keywords": [
+    "recurrente",
+    "payments",
+    "sdk",
+    "typescript",
+    "edge",
+    "serverless",
+    "cloudflare-workers",
+    "guatemala",
+    "fintech"
+  ]
+}

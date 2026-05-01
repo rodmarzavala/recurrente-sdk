@@ -1,0 +1,42 @@
+name: 🚀 Feature Request
+description: Suggest a new feature or improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve the SDK!
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the use case or limitation you are running into.
+      placeholder: "I need to call the /refunds endpoint but there's no module for it..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: |
+        What should the API look like? A code example is worth a thousand words.
+      render: typescript
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any workaround you are currently using?
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked the docs and this isn't already possible
+          required: true
+        - label: I searched existing issues and this is not a duplicate
+          required: true
