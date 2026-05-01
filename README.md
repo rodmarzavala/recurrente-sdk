@@ -27,6 +27,7 @@ Recurrente es la plataforma de pagos y suscripciones líder en Guatemala. Este S
 | 🎯 **100% tipado** | TypeScript estricto en todo — `noImplicitAny`, sin `any` |
 | 🔑 **Idempotente** | `Idempotency-Key` generado automáticamente y reutilizado en reintentos — sin cobros dobles |
 | 📋 **Paginación** | Todos los endpoints de lista retornan `Page<T>` con helpers `pageIterator()` y `autoPagingToArray()` |
+| 🚀 **Developer Experience** | Incluye un Webhook Forwarder nativo (CLI) para recibir y re-firmar eventos localmente sin usar `ngrok`. Ahorra horas de setup y depuración en `localhost`. |
 
 ---
 
