@@ -281,6 +281,24 @@ export type WebhookEventType =
   | "setup_intent.succeeded"
   | "setup_intent.cancelled";
 
+/**
+ * Discriminated union of all possible webhook events from Recurrente.
+ * Switch on `event.type` to automatically narrow the `event.data` payload.
+ */
+export type RecurrenteEvent =
+  | { type: "payment_intent.succeeded"; data: any } // PaymentIntent defined in module
+  | { type: "payment_intent.failed"; data: any }
+  | { type: "subscription.create"; data: SubscriptionResponse }
+  | { type: "subscription.past_due"; data: SubscriptionResponse }
+  | { type: "subscription.paused"; data: SubscriptionResponse }
+  | { type: "subscription.cancel"; data: SubscriptionResponse }
+  | { type: "bank_transfer_intent.pending"; data: any }
+  | { type: "bank_transfer_intent.succeeded"; data: any }
+  | { type: "bank_transfer_intent.failed"; data: any }
+  | { type: "setup_intent.succeeded"; data: any }
+  | { type: "setup_intent.cancelled"; data: any }
+  | { type: string; data: any }; // Fallback for unknown events
+
 export interface WebhookHeaders {
   "svix-id": string;
   "svix-timestamp": string;

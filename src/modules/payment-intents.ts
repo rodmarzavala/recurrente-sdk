@@ -1,4 +1,5 @@
 import type { RecurrenteClient } from "../client.js";
+import type { RequestOptions } from "../types/index.js";
 
 // Simplification of the full Payment Intent response for the SDK types
 export interface PaymentIntent {
@@ -35,14 +36,21 @@ export class PaymentIntentsModule {
   constructor(private readonly client: RecurrenteClient) {}
 
   /**
-   * Actualizar un payment intent
-   * Adjunta una URL de factura fiscal a un payment intent exitoso. Solo los intents con status succeeded pueden ser actualizados.
+   * Updates a payment intent.
+   * Attaches a tax invoice URL to a successful payment intent. Only intents with status `succeeded` can be updated.
+   * 
+   * @param id - The unique identifier of the payment intent
+   * @param data - Payment intent update payload containing the tax invoice URL
+   * @param options - Additional request options
+   * @returns A Promise resolving to the updated PaymentIntent.
    */
-  async update(id: string, data: UpdatePaymentIntentParams): Promise<PaymentIntent> {
+  async update(id: string, data: UpdatePaymentIntentParams, options?: RequestOptions): Promise<PaymentIntent> {
     return this.client.request<PaymentIntent>({
-      method: "PUT",
-      path:   `/api/payment_intents/${id}`,
-      body:   data,
+      method:         "PUT",
+      path:           `/api/payment_intents/${id}`,
+      body:           data,
+      idempotencyKey: options?.idempotencyKey,
+      timeout:        options?.timeout,
     });
   }
 }

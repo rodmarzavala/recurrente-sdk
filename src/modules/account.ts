@@ -1,4 +1,5 @@
 import type { RecurrenteClient } from "../client.js";
+import type { RequestOptions } from "../types/index.js";
 
 export interface AccountDetails {
   id: string;
@@ -14,13 +15,16 @@ export class AccountModule {
   constructor(private readonly client: RecurrenteClient) {}
 
   /**
-   * Obtén detalles de la cuenta
-   * @returns {Promise<AccountDetails>} Detalles de la cuenta
+   * Retrieves the current account details.
+   * 
+   * @param options - Additional request options
+   * @returns A Promise resolving to the account details
    */
-  async retrieve(): Promise<AccountDetails> {
+  async retrieve(options?: RequestOptions): Promise<AccountDetails> {
     return this.client.request<AccountDetails>({
-      method: "GET",
-      path:   "/api/account",
+      method:  "GET",
+      path:    "/api/account",
+      timeout: options?.timeout,
     });
   }
 }

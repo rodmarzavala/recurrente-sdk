@@ -1,4 +1,5 @@
 import type { RecurrenteClient } from "../client.js";
+import type { RequestOptions } from "../types/index.js";
 
 export interface TransferAccountInfo {
   id: string;
@@ -27,14 +28,20 @@ export class TransfersModule {
   constructor(private readonly client: RecurrenteClient) {}
 
   /**
-   * Crear una transferencia
-   * Envía dinero desde tu cuenta a otra cuenta de Recurrente. El recipient_id es el handle (@) de la cuenta destinataria.
+   * Creates an internal transfer.
+   * Sends money from your account to another Recurrente account.
+   * 
+   * @param data - Transfer configuration including amount and recipient ID (the @ handle)
+   * @param options - Additional request options (e.g. idempotencyKey)
+   * @returns A Promise resolving to the created Transfer.
    */
-  async create(data: CreateTransferParams): Promise<Transfer> {
+  async create(data: CreateTransferParams, options?: RequestOptions): Promise<Transfer> {
     return this.client.request<Transfer>({
-      method: "POST",
-      path:   "/api/transfers",
-      body:   data,
+      method:         "POST",
+      path:           "/api/transfers",
+      body:           data,
+      idempotencyKey: options?.idempotencyKey,
+      timeout:        options?.timeout,
     });
   }
 }

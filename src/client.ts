@@ -6,6 +6,10 @@ import type { RecurrenteClientOptions, RecurrenteErrorBody } from "./types/index
 
 // ── Error class ───────────────────────────────────────────────────────────────
 
+/**
+ * Represents an error returned by the Recurrente API.
+ * Includes the HTTP status code and the parsed error body.
+ */
 export class RecurrenteError extends Error {
   readonly statusCode: number;
   readonly body: RecurrenteErrorBody;
@@ -18,6 +22,24 @@ export class RecurrenteError extends Error {
   }
 }
 
+/**
+ * Type guard to check if an error is a RecurrenteError.
+ * 
+ * @param error - The error to check
+ * @returns True if the error is an instance of RecurrenteError
+ * @example
+ * try {
+ *   await recurrente.checkouts.create(data);
+ * } catch (error) {
+ *   if (isRecurrenteError(error)) {
+ *     console.error(error.statusCode, error.body.message);
+ *   }
+ * }
+ */
+export function isRecurrenteError(error: unknown): error is RecurrenteError {
+  return error instanceof RecurrenteError;
+}
+
 // ── Internal request options ──────────────────────────────────────────────────
 
 export interface InternalRequestOptions {
@@ -25,13 +47,13 @@ export interface InternalRequestOptions {
   path: string;
   body?: unknown;
   /** Use only X-PUBLIC-KEY (safe for checkout creation from frontend) */
-  publicOnly?: boolean;
+  publicOnly?: boolean | undefined;
   /** Override idempotency key for this request */
-  idempotencyKey?: string;
+  idempotencyKey?: string | undefined;
   /** Response carries pagination headers — pass the Response back */
   returnResponse?: boolean;
   /** Per-request timeout override (ms) */
-  timeout?: number;
+  timeout?: number | undefined;
 }
 
 // ── Retry helpers ─────────────────────────────────────────────────────────────

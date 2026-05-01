@@ -1,4 +1,5 @@
 import type { RecurrenteClient } from "../client.js";
+import type { RequestOptions } from "../types/index.js";
 
 export interface TerminalSessionCommand {
   id: number | string;
@@ -24,14 +25,20 @@ export class TerminalSessionCommandsModule {
   constructor(private readonly client: RecurrenteClient) {}
 
   /**
-   * Crear un comando de terminal
-   * Envía un comando de cobro a una terminal POS. Recurrente crea un checkout y lo despacha a la terminal indicada.
+   * Creates a terminal session command.
+   * Dispatches a payment command to a POS terminal. Recurrente creates a checkout and sends it to the specified terminal.
+   * 
+   * @param data - The terminal session command payload
+   * @param options - Additional request options
+   * @returns A Promise resolving to the created TerminalSessionCommand.
    */
-  async create(data: CreateTerminalSessionCommandParams): Promise<TerminalSessionCommand> {
+  async create(data: CreateTerminalSessionCommandParams, options?: RequestOptions): Promise<TerminalSessionCommand> {
     return this.client.request<TerminalSessionCommand>({
-      method: "POST",
-      path:   "/api/terminal_session_commands",
-      body:   data,
+      method:         "POST",
+      path:           "/api/terminal_session_commands",
+      body:           data,
+      idempotencyKey: options?.idempotencyKey,
+      timeout:        options?.timeout,
     });
   }
 }

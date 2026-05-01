@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-05-01
+
+### Added
+- **Developer Experience (DX) Overhaul**: Comprehensive enhancements for production-grade integrations.
+- **Type Guards**: Introduced `isRecurrenteError(error)` to safely narrow thrown exceptions and extract HTTP status codes and parsed API bodies.
+- **Advanced Webhook Typing**: Added `RecurrenteEvent` discriminated union type. Allows type-safe event handling (`checkout.succeeded`, `subscription.canceled`, etc.) directly from `constructEvent()`.
+- **Per-Request Options**: Every API endpoint method now accepts an optional `RequestOptions` parameter to override the default `timeout` or explicitly provide a custom `idempotencyKey`.
+- **JSDoc Documentation**: Comprehensive JSDoc comments added to all public methods across the SDK, providing rich inline IDE documentation and parameter descriptions.
+- **Examples Library**: New `/examples` directory demonstrating integration patterns for Node.js (Express), Next.js (App Router / Edge), and Cloudflare Workers.
+
 ## [1.0.0] - 2026-05-01
 
 ### Added
