@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-05-01
+
+### Added
+- **100% API Coverage**: The SDK now supports all official Recurrente API endpoints.
+- **`account` module** — `retrieve` account details
+- **`coupons` module** — `list`, `retrieve`, `create`, `update`, `archive`
+- **`paymentIntents` module** — `update` (attach tax invoices)
+- **`terminalSessionCommands` module** — `create` POS terminal sessions
+- **`transfers` module** — `create` internal transfers
+- **`users` module** — `create` users
+- **`test` module** — `credentials` validation
+- **Documentation**: Updated API reference with all new modules.
+
 ## [0.3.2] - 2026-05-01
 
 ### Fixed
