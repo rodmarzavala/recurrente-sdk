@@ -36,7 +36,8 @@ export default defineConfig({
             text: 'Core',
             items: [
               { text: 'Referencia API', link: '/api-reference' },
-              { text: 'Webhooks', link: '/webhooks' }
+              { text: 'Webhooks', link: '/webhooks' },
+              { text: 'CLI & Forwarder', link: '/cli' }
             ]
           }
         ],
@@ -69,7 +70,8 @@ export default defineConfig({
             text: 'Core Features',
             items: [
               { text: 'API Reference', link: '/en/api-reference' },
-              { text: 'Webhooks', link: '/en/webhooks' }
+              { text: 'Webhooks', link: '/en/webhooks' },
+              { text: 'CLI & Forwarder', link: '/en/cli' }
             ]
           }
         ],
