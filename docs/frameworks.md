@@ -1,6 +1,6 @@
 # Ejemplos por Framework
 
-El SDK de Recurrente está diseñado para ser **Edge-first**. Esto significa que jala nítido en frameworks modernos que despliegan a Vercel Edge, Cloudflare Workers o Deno. ¿Por qué? Porque usa el `fetch` y `crypto.subtle` nativo de los navegadores, saltándose los típicos dolores de cabeza de usar módulos pesados de Node.js.
+El SDK de Recurrente está diseñado para ser **Edge-first**. Esto significa que funciona nativamente en frameworks modernos que despliegan a Vercel Edge, Cloudflare Workers o Deno. ¿Por qué? Porque usa el `fetch` y `crypto.subtle` nativo de los navegadores, saltándose los típicos dolores de cabeza de usar módulos pesados de Node.js.
 
 Aquí te dejamos cómo instanciar y usar el SDK en los frameworks más populares.
 
@@ -65,15 +65,15 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   const event = JSON.parse(rawBody);
-  console.log("Se recibió un webhook chilero:", event.event_type);
+  console.log("Se recibió un webhook válido:", event.event_type);
 
-  return new Response("Nítido", { status: 200 });
+  return new Response("OK", { status: 200 });
 };
 ```
 
 ## React (Client-Side)
 
-Si no tienes un backend y todo lo haces desde el front, puedes armar los checkouts directo en el navegador usando el **Modo Público**. Si le mandas un string vacío en `secretKey` y configuras `{ publicOnly: true }`, el SDK desactiva todos los métodos peligrosos (como listar clientes) pero sí te deja armar links de pago de forma segura.
+Si no tienes un backend y todo lo haces desde el front, puedes crear los checkouts directo en el navegador usando el **Modo Público**. Si le mandas un string vacío en `secretKey` y configuras `{ publicOnly: true }`, el SDK desactiva todos los métodos peligrosos (como listar clientes) pero sí te deja armar links de pago de forma segura.
 
 ```tsx
 import { useState } from "react";
@@ -93,7 +93,7 @@ export default function CheckoutButton() {
     setLoading(true);
     try {
       const { checkout_url } = await recurrente.checkouts.create({
-        items: [{ name: "Zapatos chilísimos", amount_in_cents: 50000, currency: "GTQ", quantity: 1 }],
+        items: [{ name: "Zapatos deportivos", amount_in_cents: 50000, currency: "GTQ", quantity: 1 }],
         success_url: window.location.origin + "/gracias",
         cancel_url: window.location.origin + "/cancelado"
       }, { publicOnly: true });

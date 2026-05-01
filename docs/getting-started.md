@@ -1,11 +1,11 @@
-# Empezar a codear
+# Primeros pasos
 
 > **Lo que necesitas:** Node.js ≥ 18, Deno ≥ 1.38, Bun ≥ 1.0, o cualquier entorno que soporte
 > `fetch` nativo y Web Crypto API (Cloudflare Workers, Vercel Edge, etc.)
 
 ## Instalación
 
-Pégale este comando a tu terminal:
+Ejecuta este comando en tu terminal:
 
 ```bash
 npm install @rodmarzavala/recurrente-sdk
@@ -28,7 +28,7 @@ Ahí vas a toparte con dos tipos de llaves:
 | Pública | `pk_live_` / `pk_test_` | Para crear checkouts (segura para usar en el frontend) |
 | Secreta | `sk_live_` / `sk_test_` | Para todo lo demás (Ojo: ¡solo úsala en tu backend!) |
 
-> ⚠️ **Pilas aquí:** Nunca vayas a quemar (hardcodear) tu llave secreta en el código del cliente o en un repo público de GitHub.
+> ⚠️ **Precaución:** Nunca vayas a quemar (hardcodear) tu llave secreta en el código del cliente o en un repo público de GitHub.
 
 ### 2. Instanciar el cliente
 
@@ -63,7 +63,7 @@ const checkout = await recurrente.checkouts.create({
 console.log(checkout.checkout_url);
 ```
 
-### 4. Verificar webhooks (sin morir en el intento)
+### 4. Verificar webhooks de forma segura
 
 ```typescript
 import { RecurrenteWebhooks } from "@rodmarzavala/recurrente-sdk";
@@ -80,12 +80,12 @@ app.post("/webhooks/recurrente", async (req, res) => {
     process.env.RECURRENTE_WEBHOOK_SECRET!, // empieza con whsec_...
   );
 
-  if (!isValid) return res.status(401).send("No autorizado mano");
+  if (!isValid) return res.status(401).send("No autorizado");
 
   const event = req.body;
   console.log(event.event_type); // "payment_intent.succeeded"
 
-  res.status(200).send("Nítido");
+  res.status(200).send("OK");
 });
 ```
 
@@ -93,7 +93,7 @@ app.post("/webhooks/recurrente", async (req, res) => {
 
 ## Variables de Entorno
 
-Lo más chilero es armar un archivo `.env` (¡y asegurarte de que no se vaya en el commit!):
+La mejor práctica es crear un archivo `.env` (¡y asegurarte de que no se vaya en el commit!):
 
 ```bash
 # .env
@@ -102,7 +102,7 @@ RECURRENTE_SECRET_KEY=sk_live_...
 RECURRENTE_WEBHOOK_SECRET=whsec_...
 ```
 
-Metelo a tu `.gitignore` de una vez:
+Asegúrate de agregarlo a tu `.gitignore`:
 
 ```bash
 echo ".env" >> .gitignore
@@ -127,4 +127,4 @@ Tarjeta de prueba para que no gastes tu saldo: `4242 4242 4242 4242` (cualquier 
 
 - [Referencia de la API](./api-reference.md) — todos los métodos, parámetros y tipos.
 - [Guía de Webhooks](./webhooks.md) — tipos de eventos y mejores prácticas.
-- [Contribuir](https://github.com/rodmarzavala/recurrente-sdk/blob/main/CONTRIBUTING.md) — cómo ayudar a mejorar el SDK o reportar clavos.
+- [Contribuir](https://github.com/rodmarzavala/recurrente-sdk/blob/main/CONTRIBUTING.md) — cómo ayudar a mejorar el SDK o reportar problemas.
