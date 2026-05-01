@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-05-01
+
+### Changed
+- Switch to npm Trusted Publishing (OIDC) via GitHub Actions, replacing static tokens
+- Fix test timeout for exponential backoff test under Node.js 18
+- Expand npm keywords and package description for better discovery in Guatemala
+
+## [0.3.0] - 2026-05-01
+
+### Added
+- Polyfill Web Crypto API natively for Node.js 18 in Vitest environment
+- Unify CI/CD workflows into a single layered pipeline (Security Gates)
+- Isolate OpenSSF Scorecard to dedicated workflow for strict OIDC compliance
+
 ## [0.2.0] - 2026-04-30
 
 ### Added
