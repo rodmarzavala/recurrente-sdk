@@ -403,16 +403,17 @@ interface WebhookEndpointResponse {
 
 ## `RecurrenteWebhooks` (static)
 
-### `.verifySignature(rawBody, headers, secret, options?)` → `Promise<boolean>`
+### `.constructEvent(rawBody, headers, secret, options?)` → `Promise<RecurrenteEvent>`
 
-Verifies the authenticity of an incoming webhook using HMAC-SHA256 (Svix protocol).
+Verifies the authenticity of an incoming webhook using HMAC-SHA256 (Svix protocol) and returns a strongly-typed `RecurrenteEvent` discriminated union.
 Uses `crypto.subtle.verify` — **constant-time comparison**, immune to timing attacks.
 Rejects events older than 5 minutes by default (**replay-attack prevention**).
 
 ```typescript
 import { RecurrenteWebhooks } from "@rodmarzavala/recurrente-sdk";
 
-const isValid = await RecurrenteWebhooks.verifySignature(
+// It will throw an error if the signature is invalid or expired
+const event = await RecurrenteWebhooks.constructEvent(
   rawBody,   // string — the unparsed request body
   {
     "svix-id":        headers["svix-id"],
@@ -422,6 +423,16 @@ const isValid = await RecurrenteWebhooks.verifySignature(
   process.env.RECURRENTE_WEBHOOK_SECRET!, // "whsec_..."
   { maxAgeSeconds: 300 }, // optional — default 300 (5 min), Infinity to disable
 );
+
+// event is a discriminated union of `RecurrenteEvent`
+switch (event.type) {
+  case "checkout.succeeded":
+    console.log(event.data.id); // event.data is CheckoutResponse
+    break;
+  case "subscription.canceled":
+    console.log(event.data.status); // event.data is SubscriptionResponse
+    break;
+}
 ```
 
 | Parameter | Type | Description |
@@ -431,7 +442,7 @@ const isValid = await RecurrenteWebhooks.verifySignature(
 | `secret` | `string` | `whsec_<base64>` signing secret |
 | `options.maxAgeSeconds` | `number` | Max age in seconds (default `300`, `Infinity` to disable) |
 
-Returns `false` (never throws) on invalid input, missing headers, or expired events.
+> Alternatively, you can use `.verifySignature(...)` if you just want a boolean `isValid` return without parsing the event payload.
 
 ---
 
@@ -572,12 +583,12 @@ await recurrente.coupons.archive("coup_abc123");
 All methods throw `RecurrenteError` on non-2xx responses.
 
 ```typescript
-import { RecurrenteError } from "@rodmarzavala/recurrente-sdk";
+import { isRecurrenteError } from "@rodmarzavala/recurrente-sdk";
 
 try {
   await recurrente.checkouts.retrieve("ch_nonexistent");
 } catch (error) {
-  if (error instanceof RecurrenteError) {
+  if (isRecurrenteError(error)) {
     console.error(error.statusCode); // 404
     console.error(error.message);    // "Not found"
     console.error(error.body);       // { message: "Not found" }
@@ -612,8 +623,31 @@ class RecurrenteError extends Error {
 Requests time out after **30 seconds** by default. Override globally or per-request:
 
 ```typescript
-// Global
+// Global timeout configuration
 const recurrente = new Recurrente({ ..., timeout: 10_000 }); // 10 s
 
-// Per-request (not yet exposed on modules — use RecurrenteClient directly)
+// Per-request override
+const checkout = await recurrente.checkouts.create(
+  { ...data },
+  { timeout: 5000 } // 5 s for this request only
+);
+```
+
+### RequestOptions
+
+All SDK module methods accept an optional `options` parameter as the final argument, which adheres to the `RequestOptions` interface:
+
+```typescript
+interface RequestOptions {
+  idempotencyKey?: string;
+  timeout?: number;
+}
+```
+
+```typescript
+// Enforce idempotency manually per-request
+const user = await recurrente.users.create(
+  { email: "user@example.com" },
+  { idempotencyKey: "usr_create_123" }
+);
 ```

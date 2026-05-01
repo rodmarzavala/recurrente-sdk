@@ -146,22 +146,31 @@ export const runtime = "edge";
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
 
-  const isValid = await RecurrenteWebhooks.verifySignature(
-    rawBody,
-    {
-      "svix-id":        req.headers.get("svix-id") ?? "",
-      "svix-timestamp": req.headers.get("svix-timestamp") ?? "",
-      "svix-signature": req.headers.get("svix-signature") ?? "",
-    },
-    process.env.RECURRENTE_WEBHOOK_SECRET!,
-  );
+  try {
+    const event = await RecurrenteWebhooks.constructEvent(
+      rawBody,
+      {
+        "svix-id":        req.headers.get("svix-id") ?? "",
+        "svix-timestamp": req.headers.get("svix-timestamp") ?? "",
+        "svix-signature": req.headers.get("svix-signature") ?? "",
+      },
+      process.env.RECURRENTE_WEBHOOK_SECRET!,
+    );
 
-  if (!isValid) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    // event is a discriminated union. TypeScript knows event.data type based on event.type
+    switch (event.type) {
+      case "checkout.succeeded":
+        await handlePayment(event.data);
+        break;
+      case "subscription.canceled":
+        await cancelSubscription(event.data);
+        break;
+    }
 
-  const event = JSON.parse(rawBody);
-  await handleEvent(event);
-
-  return NextResponse.json({ received: true });
+    return NextResponse.json({ received: true });
+  } catch (err) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 }
 ```
 

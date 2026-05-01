@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-05-01
+
+### Fixed
+- **Documentation**: Updated `README.md` and VitePress documentation (`docs/`) to accurately reflect the new DX features introduced in `v1.1.0` (`isRecurrenteError`, `RequestOptions`, and `constructEvent`).
+
 ## [1.1.0] - 2026-05-01
 
 ### Added

@@ -107,7 +107,13 @@ const page = await recurrente.refunds.list({ checkout_id: "ch_abc123" });
 ```typescript
 const page    = await recurrente.products.list();
 const product = await recurrente.products.retrieve("prod_abc123");
-const created = await recurrente.products.create({ name: "Plan Pro", ... });
+
+// Puedes pasar `RequestOptions` (idempotencyKey, timeout) como último parámetro en cualquier método
+const created = await recurrente.products.create(
+  { name: "Plan Pro", ... },
+  { idempotencyKey: "req_xyz_123", timeout: 15000 }
+);
+
 const updated = await recurrente.products.update("prod_abc123", { name: "Plan Pro v2" });
 await recurrente.products.archive("prod_abc123");
 ```
@@ -146,33 +152,45 @@ const all = await autoPagingToArray((p) => recurrente.customers.list(p));
 
 ### Verificación de Webhooks
 
-Verifica que los webhooks entrantes son auténticos — funciona en cualquier runtime.
+Verifica que los webhooks entrantes son auténticos y obtén tipado fuerte (Discriminated Union) para el evento.
 
 ```typescript
 import { RecurrenteWebhooks } from "@rodmarzavala/recurrente-sdk";
 
-const isValid = await RecurrenteWebhooks.verifySignature(
-  rawBody,   // ⚠️ string crudo — NO JSON parseado
-  {
-    "svix-id":        req.headers["svix-id"],
-    "svix-timestamp": req.headers["svix-timestamp"],
-    "svix-signature": req.headers["svix-signature"],
-  },
-  process.env.RECURRENTE_WEBHOOK_SECRET!, // "whsec_..."
-);
+try {
+  // `constructEvent` verifica la firma y retorna un `RecurrenteEvent` tipado
+  const event = await RecurrenteWebhooks.constructEvent(
+    rawBody,   // ⚠️ string crudo — NO JSON parseado
+    {
+      "svix-id":        req.headers["svix-id"],
+      "svix-timestamp": req.headers["svix-timestamp"],
+      "svix-signature": req.headers["svix-signature"],
+    },
+    process.env.RECURRENTE_WEBHOOK_SECRET! // "whsec_..."
+  );
 
-if (!isValid) return res.status(401).send("Unauthorized");
+  switch (event.type) {
+    case "checkout.succeeded":
+      console.log(`Pagado: ${event.data.amount_in_cents}`); // event.data es CheckoutResponse
+      break;
+    case "subscription.canceled":
+      console.log(`Cancelada: ${event.data.id}`); // event.data es SubscriptionResponse
+      break;
+  }
+} catch (err) {
+  return res.status(401).send("Unauthorized");
+}
 ```
 
 ### Manejo de errores
 
 ```typescript
-import { RecurrenteError } from "@rodmarzavala/recurrente-sdk";
+import { isRecurrenteError } from "@rodmarzavala/recurrente-sdk";
 
 try {
   await recurrente.checkouts.retrieve("ch_nonexistent");
 } catch (err) {
-  if (err instanceof RecurrenteError) {
+  if (isRecurrenteError(err)) {
     console.error(err.statusCode); // 404
     console.error(err.message);    // mensaje de error de la API
     console.error(err.body);       // body completo del error

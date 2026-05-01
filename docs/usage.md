@@ -222,14 +222,14 @@ export async function handleRecurrenteWebhook(
 ### Type-safe error handling
 
 ```typescript
-import { RecurrenteError } from "@rodmarzavala/recurrente-sdk";
+import { isRecurrenteError } from "@rodmarzavala/recurrente-sdk";
 
 async function safeCreateCheckout(data: CreateCheckoutRequest) {
   try {
     return await recurrente.checkouts.create(data);
 
   } catch (err) {
-    if (err instanceof RecurrenteError) {
+    if (isRecurrenteError(err)) {
       switch (err.statusCode) {
         case 401:
           // Bad or missing API keys
@@ -252,7 +252,7 @@ async function safeCreateCheckout(data: CreateCheckoutRequest) {
       }
     }
 
-    // Network error (statusCode === 0)
+    // Network error or other unknown error
     throw err;
   }
 }
