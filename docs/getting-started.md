@@ -8,11 +8,11 @@
 Pégale este comando a tu terminal:
 
 ```bash
-npm install recurrente-sdk
+npm install @rodmarzavala/recurrente-sdk
 # o si usas pnpm
-pnpm add recurrente-sdk
+pnpm add @rodmarzavala/recurrente-sdk
 # o yarn
-yarn add recurrente-sdk
+yarn add @rodmarzavala/recurrente-sdk
 ```
 
 ## Tu primera petición

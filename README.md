@@ -1,41 +1,41 @@
-# recurrente-sdk
+# @rodmarzavala/recurrente-sdk
 
-**Unofficial TypeScript SDK for the [Recurrente](https://recurrente.com) REST API.**  
-Zero runtime dependencies · Edge & Serverless compatible · Fully typed
+**SDK no oficial de TypeScript para la API REST de [Recurrente](https://recurrente.com).**  
+Zero dependencias · Edge & Serverless · Completamente tipado
 
 [![npm version](https://img.shields.io/npm/v/@rodmarzavala%2Frecurrente-sdk?color=4f46e5&style=flat-square)](https://www.npmjs.com/package/@rodmarzavala/recurrente-sdk)
+[![npm downloads](https://img.shields.io/npm/dm/@rodmarzavala%2Frecurrente-sdk?color=4f46e5&style=flat-square)](https://www.npmjs.com/package/@rodmarzavala/recurrente-sdk)
 [![License: MIT](https://img.shields.io/badge/license-MIT-4f46e5?style=flat-square)](./LICENSE)
 [![CI](https://img.shields.io/github/actions/workflow/status/rodmarzavala/recurrente-sdk/ci.yml?label=CI&style=flat-square)](https://github.com/rodmarzavala/recurrente-sdk/actions/workflows/ci.yml)
-[![Security](https://img.shields.io/github/actions/workflow/status/rodmarzavala/recurrente-sdk/security.yml?label=security&color=22c55e&style=flat-square)](https://github.com/rodmarzavala/recurrente-sdk/actions/workflows/security.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-4f46e5?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
 ---
 
-## Why this SDK?
+## ¿Por qué este SDK?
 
-| Feature | Details |
-|---------|----------|
-| 🚀 **Edge-first** | Uses only Web-standard APIs — runs on Cloudflare Workers, Vercel Edge, Deno, Bun, and Node.js ≥ 18 with zero changes |
-| 📦 **Zero runtime deps** | `fetch` native + Web Crypto API — nothing in `dependencies` |
-| 🔒 **Secure by default** | Webhook verification uses `crypto.subtle.verify` (constant-time) + replay-attack prevention (5 min window) |
-| 💪 **Resilient** | Exponential backoff retries for 429 & 5xx · `Retry-After` support · 30 s timeout via `AbortController` |
-| 🎯 **Fully typed** | Strict TypeScript throughout — `noImplicitAny`, no `any` |
-| 🔑 **Idempotent** | UUID `Idempotency-Key` auto-generated and reused across retries — no duplicate charges |
-| 📋 **Paginated** | All list endpoints return `Page<T>` with `pageIterator()` and `autoPagingToArray()` helpers |
+| Feature | Detalle |
+|---------|---------|
+| ⚡️ **Edge-first** | Usa solo Web APIs estándar — funciona en Cloudflare Workers, Vercel Edge, Deno, Bun y Node.js ≥ 18 sin cambios |
+| 📦 **Zero dependencias** | `fetch` nativo + Web Crypto API — nada en `dependencies` |
+| 🛡️ **Seguro por defecto** | Verificación de webhooks con `crypto.subtle.verify` (tiempo constante) + protección contra replay attacks (ventana 5 min) |
+| 💪 **Resiliente** | Reintentos con exponential backoff para 429 & 5xx · soporte `Retry-After` · timeout de 30s via `AbortController` |
+| 🎯 **100% tipado** | TypeScript estricto en todo — `noImplicitAny`, sin `any` |
+| 🔑 **Idempotente** | `Idempotency-Key` generado automáticamente y reutilizado en reintentos — sin cobros dobles |
+| 📋 **Paginación** | Todos los endpoints de lista retornan `Page<T>` con helpers `pageIterator()` y `autoPagingToArray()` |
 
 ---
 
-## Installation
+## Instalación
 
 ```bash
-npm install recurrente-sdk
-# or
-pnpm add recurrente-sdk
-# or
-yarn add recurrente-sdk
+npm install @rodmarzavala/recurrente-sdk
+# o
+pnpm add @rodmarzavala/recurrente-sdk
+# o
+yarn add @rodmarzavala/recurrente-sdk
 ```
 
-> **Runtime requirement:** Node.js ≥ 18, Deno ≥ 1.38, Bun ≥ 1.0, or any runtime with the [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) and [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API).
+> **Requisito mínimo:** Node.js ≥ 18, Deno ≥ 1.38, Bun ≥ 1.0, o cualquier runtime con [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) y [Web Crypto API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API).
 
 ---
 
@@ -49,7 +49,7 @@ const recurrente = new Recurrente({
   secretKey: process.env.RECURRENTE_SECRET_KEY!,
 });
 
-// Create a checkout and redirect the customer
+// Crea un checkout y redirige al cliente
 const checkout = await recurrente.checkouts.create({
   items: [
     {
@@ -59,8 +59,8 @@ const checkout = await recurrente.checkouts.create({
       quantity: 1,
     },
   ],
-  success_url: "https://yourdomain.com/gracias",
-  cancel_url: "https://yourdomain.com/cancelar",
+  success_url: "https://tudominio.com/gracias",
+  cancel_url: "https://tudominio.com/cancelar",
 });
 
 redirect(checkout.checkout_url);
@@ -68,7 +68,7 @@ redirect(checkout.checkout_url);
 
 ---
 
-## Features
+## Módulos disponibles
 
 ### Checkouts
 
@@ -90,9 +90,9 @@ await recurrente.subscriptions.cancel("su_abc123");
 ### Refunds
 
 ```typescript
-// Full refund
+// Reembolso total
 const refund = await recurrente.refunds.create({ checkout_id: "ch_abc123" });
-// Partial refund
+// Reembolso parcial
 const partial = await recurrente.refunds.create({ checkout_id: "ch_abc123", amount_in_cents: 5000 });
 const page = await recurrente.refunds.list({ checkout_id: "ch_abc123" });
 ```
@@ -115,39 +115,39 @@ const customer = await recurrente.customers.retrieve("cus_abc123");
 const created  = await recurrente.customers.create({ email: "user@example.com" });
 ```
 
-### Webhook endpoints
+### Webhook Endpoints
 
 ```typescript
 const endpoint = await recurrente.webhookEndpoints.create({
   url: "https://myapp.com/webhooks/recurrente",
 });
-console.log(endpoint.signing_secret); // save this — shown only once!
+console.log(endpoint.signing_secret); // ¡guárdalo — solo se muestra una vez!
 await recurrente.webhookEndpoints.delete(endpoint.id);
 ```
 
-### Pagination
+### Paginación
 
 ```typescript
 import { pageIterator, autoPagingToArray } from "@rodmarzavala/recurrente-sdk";
 
-// Iterate page by page
+// Iterar página por página
 for await (const page of pageIterator((p) => recurrente.products.list(p))) {
   page.data.forEach((p) => console.log(p.name));
 }
 
-// Get all items at once
+// Obtener todos los registros de una sola vez
 const all = await autoPagingToArray((p) => recurrente.customers.list(p));
 ```
 
-### Webhook verification
+### Verificación de Webhooks
 
-Verify that incoming webhooks are authentic — works in every runtime.
+Verifica que los webhooks entrantes son auténticos — funciona en cualquier runtime.
 
 ```typescript
 import { RecurrenteWebhooks } from "@rodmarzavala/recurrente-sdk";
 
 const isValid = await RecurrenteWebhooks.verifySignature(
-  rawBody,   // ⚠️ raw string — NOT parsed JSON
+  rawBody,   // ⚠️ string crudo — NO JSON parseado
   {
     "svix-id":        req.headers["svix-id"],
     "svix-timestamp": req.headers["svix-timestamp"],
@@ -159,7 +159,7 @@ const isValid = await RecurrenteWebhooks.verifySignature(
 if (!isValid) return res.status(401).send("Unauthorized");
 ```
 
-### Error handling
+### Manejo de errores
 
 ```typescript
 import { RecurrenteError } from "@rodmarzavala/recurrente-sdk";
@@ -169,89 +169,73 @@ try {
 } catch (err) {
   if (err instanceof RecurrenteError) {
     console.error(err.statusCode); // 404
-    console.error(err.message);    // API error message
-    console.error(err.body);       // Full error body
+    console.error(err.message);    // mensaje de error de la API
+    console.error(err.body);       // body completo del error
   }
 }
 ```
 
-### Automatic retries
+### Reintentos automáticos
 
-The client retries `429` (rate limit) and `5xx` responses automatically with
-full-jitter exponential backoff (max 3 retries, cap 30 s). Configure via `maxRetries`:
+El cliente reintenta `429` (rate limit) y `5xx` automáticamente con backoff exponencial (max 3 reintentos, cap 30s). Configurable:
 
 ```typescript
 const recurrente = new Recurrente({
   publicKey: "...",
   secretKey: "...",
-  maxRetries: 5, // or 0 to disable
+  maxRetries: 5, // o 0 para deshabilitar
 });
 ```
 
 ---
 
-## Documentation
+## Documentación
 
-| Document | Description |
-|----------|-------------|
-| [Getting Started](./docs/getting-started.md) | Installation, first request, sandbox vs production |
-| [API Reference](./docs/api-reference.md) | All methods, parameters, and TypeScript interfaces |
-| [Webhooks Guide](./docs/webhooks.md) | Verification, event types, framework examples, best practices |
-| [Recurrente Docs](https://docs.recurrente.com) | Official Recurrente API documentation |
+📖 **[rodmarzavala.github.io/recurrente-sdk](https://rodmarzavala.github.io/recurrente-sdk/)** — Documentación completa en español e inglés.
 
----
-
-## Compatibility
-
-| Runtime | Minimum version | Status |
-|---------|----------------|--------|
-| Node.js | 18.0.0 | ✅ Supported |
-| Cloudflare Workers | Any | ✅ Supported |
-| Vercel Edge Functions | Any | ✅ Supported |
-| Deno | 1.38.0 | ✅ Supported |
-| Bun | 1.0.0 | ✅ Supported |
-| Browser | Modern (ES2022+) | ✅ Supported |
+| Guía | Descripción |
+|------|-------------|
+| [Inicio Rápido](https://rodmarzavala.github.io/recurrente-sdk/getting-started) | Instalación, primera request, sandbox vs producción |
+| [API Reference](https://rodmarzavala.github.io/recurrente-sdk/api-reference) | Todos los métodos, parámetros e interfaces TypeScript |
+| [Webhooks](https://rodmarzavala.github.io/recurrente-sdk/webhooks) | Verificación, tipos de eventos, ejemplos por framework |
+| [Frameworks](https://rodmarzavala.github.io/recurrente-sdk/frameworks) | Next.js, Astro, React |
+| [Docs de Recurrente](https://docs.recurrente.com) | Documentación oficial de la API de Recurrente |
 
 ---
 
-## Contributing
+## Compatibilidad
 
-Contributions of all kinds are welcome! Whether it's a bug fix, a new module,
-or a typo in the docs — every PR matters.
+| Runtime | Versión mínima | Estado |
+|---------|---------------|--------|
+| Node.js | 18.0.0 | ✅ Soportado |
+| Cloudflare Workers | Cualquiera | ✅ Soportado |
+| Vercel Edge Functions | Cualquiera | ✅ Soportado |
+| Deno | 1.38.0 | ✅ Soportado |
+| Bun | 1.0.0 | ✅ Soportado |
+| Browser | Moderno (ES2022+) | ✅ Soportado |
 
-👉 Read [CONTRIBUTING.md](./CONTRIBUTING.md) to get started.
+---
 
-**Quick start for contributors:**
+## Contribuir
+
+¡Todas las contribuciones son bienvenidas! Ya sea un fix de bug, un módulo nuevo, o una typo en los docs.
+
+👉 Lee [CONTRIBUTING.md](./CONTRIBUTING.md) para empezar.
 
 ```bash
 git clone https://github.com/rodmarzavala/recurrente-sdk.git
 cd recurrente-sdk
 npm install
-npm test         # 13 tests, should all pass
-npm run typecheck  # zero errors
+npm test          # 31 tests, todos deben pasar
+npm run typecheck # cero errores
 ```
-
----
-
-## Roadmap
-
-The following modules are planned for future releases. PRs welcome!
-
-- [ ] `refunds` — create and retrieve refunds
-- [ ] `products` — list, create, and update products
-- [ ] `customers` — manage customer records
-- [ ] `transfers` — balance transfers between accounts
-- [ ] `webhook_endpoints` — programmatic endpoint management
-- [ ] Pagination helpers
-- [ ] Automatic replay-attack prevention (configurable `maxWebhookAge`)
 
 ---
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT — ver [LICENSE](./LICENSE).
 
 ---
 
-> **Disclaimer:** This is an independent open-source project and is not
-> officially affiliated with or endorsed by Recurrente.
+> **Disclaimer:** Este es un proyecto open-source independiente y no está oficialmente afiliado ni respaldado por Recurrente.

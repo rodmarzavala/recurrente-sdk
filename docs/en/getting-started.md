@@ -6,11 +6,11 @@
 ## Installation
 
 ```bash
-npm install recurrente-sdk
+npm install @rodmarzavala/recurrente-sdk
 # or
-pnpm add recurrente-sdk
+pnpm add @rodmarzavala/recurrente-sdk
 # or
-yarn add recurrente-sdk
+yarn add @rodmarzavala/recurrente-sdk
 ```
 
 ## Your first request
