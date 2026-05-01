@@ -44,6 +44,24 @@ yarn add @rodmarzavala/recurrente-sdk
 
 ---
 
+## 🪄 Asistente de Configuración (CLI)
+
+El SDK incluye una herramienta de línea de comandos (CLI) interactiva para configurar tu proyecto en segundos. ¡Genera tus variables de entorno y tu ruta de webhooks (ej. para Next.js o Express) automáticamente!
+
+```bash
+npx @rodmarzavala/recurrente-sdk init
+```
+
+## 🚀 Webhook Forwarder Local (Efecto Stripe CLI)
+
+Desarrollar webhooks en local no debería ser doloroso. No instales `ngrok` ni pagues por túneles. La CLI del SDK incluye un forwarder que envía los eventos de Recurrente directo a tu `localhost`, ¡y refirma criptográficamente el payload para que tu código local no falle al verificar las firmas!
+
+```bash
+npx @rodmarzavala/recurrente-sdk listen --forward-to http://localhost:3000/api/webhooks/recurrente
+```
+
+---
+
 ## Quick Start
 
 ```typescript

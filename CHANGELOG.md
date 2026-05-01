@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-05-01
+
+### Added (Efecto WOW 🚀)
+- **Recurrente CLI**: Añadido soporte nativo para `npx @rodmarzavala/recurrente-sdk listen` y `npx @rodmarzavala/recurrente-sdk init`.
+- **Webhook Forwarder (listen)**: Permite escuchar eventos de Recurrente en tu entorno local sin depender de ngrok o locatunnel. Re-firma automáticamente los payloads de Smee.io usando tu secreto local, permitiendo simular el comportamiento de producción (similar a Stripe CLI).
+- **Setup Wizard (init)**: Asistente interactivo que te permite inicializar tus llaves de API en un `.env` y genera el código *boilerplate* de tu webhook handler en Next.js (App Router) o Express.
+- Arquitectura *Zero-Dependency*: La CLI aprovecha `node:util` y las Web APIs (`fetch`, `crypto`) nativas de Node 18+ sin inflar el tamaño de la librería.
+
 ## [1.1.1] - 2026-05-01
 
 ### Fixed
