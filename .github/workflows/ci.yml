@@ -5,45 +5,161 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  schedule:
+    - cron: "0 8 * * 1" # Weekly security scan — every Monday 08:00 UTC
 
-# Minimal permissions — principle of least privilege
+# Minimal default permissions — individual jobs escalate only what they need
 permissions:
   contents: read
 
 jobs:
-  test:
-    name: Typecheck · Test · Build (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
+  # ── LAYER 1 — All run in parallel, no dependencies ──────────────────────────
 
+  typecheck:
+    name: TypeScript strict check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+
+  audit:
+    name: npm audit (security gate)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Audit production dependencies
+        run: npm audit --audit-level=moderate --omit=dev
+      - name: Audit all dependencies (informational)
+        run: npm audit || true
+
+  dependency-review:
+    name: Dependency review (PRs only)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: always
+
+  codeql:
+    name: CodeQL (TypeScript)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: typescript
+          queries: security-extended, security-and-quality
+      - uses: github/codeql-action/autobuild@v3
+      - uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:typescript"
+
+  scorecard:
+    name: OpenSSF Scorecard
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: ossf/scorecard-action@v2.4.0
+        with:
+          results_file: scorecard.sarif
+          results_format: sarif
+          publish_results: true
+      - uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: scorecard.sarif
+
+  # ── LAYER 2 — GATE 1: typecheck + audit must pass ───────────────────────────
+
+  test:
+    name: Unit tests (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    needs: [typecheck, audit]  # ← security gate
     strategy:
       fail-fast: false
       matrix:
         node-version: ["18.x", "20.x", "22.x"]
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm test
 
-      - name: Install dependencies
-        run: npm ci --ignore-scripts   # --ignore-scripts prevents postinstall supply-chain attacks
+  # ── LAYER 3 — GATE 2: all test matrix must pass ──────────────────────────────
 
-      - name: TypeScript — strict check
-        run: npm run typecheck
-
-      - name: Unit tests
-        run: npm test
-
-      - name: Build (verify dist compiles)
-        run: npm run build
-
+  build:
+    name: Build & verify dist
+    runs-on: ubuntu-latest
+    needs: [test]  # ← security gate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build
       - name: Verify published files
         run: |
-          # Ensure dist/ was created and contains expected exports
-          test -f dist/index.js || (echo "dist/index.js missing" && exit 1)
+          test -f dist/index.js  || (echo "dist/index.js missing"  && exit 1)
           test -f dist/index.d.ts || (echo "dist/index.d.ts missing" && exit 1)
+
+  # ── LAYER 4 — GATE 3: only on main, after build passes ──────────────────────
+
+  docs:
+    name: Deploy docs to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build]  # ← security gate
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run docs:build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vitepress/dist
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
