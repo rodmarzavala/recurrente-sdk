@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2026-05-01
+
+### Fixed
+- Resolve `404 Not Found` npm publish error by explicitly upgrading npm and removing `registry-url` to prevent token conflicts with OIDC Trusted Publishing.
+
 ## [0.3.1] - 2026-05-01
 
 ### Changed
