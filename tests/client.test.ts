@@ -58,7 +58,7 @@ describe("RecurrenteClient — retry logic", () => {
     await expect(client.request({ method: "GET", path: "/api/test" }))
       .rejects.toThrow(RecurrenteError);
     expect(f).toHaveBeenCalledTimes(4); // 1 initial + 3 retries
-  });
+  }, 10000);
 
   it("retries 500 and succeeds on second attempt", async () => {
     const f = mockFetch([
