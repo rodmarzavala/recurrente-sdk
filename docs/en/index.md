@@ -16,16 +16,16 @@ hero:
 features:
   - title: 100% Edge-First
     details: Runs flawlessly on Vercel Edge, Cloudflare Workers, Next.js, Astro, and Bun. Forget about Node.js "crypto" polyfill errors.
-    icon: ⚡️
+    icon: 
   - title: Zero Dependencies
     details: Uses native fetch and the Web Crypto API. Your bundle stays tiny, secure, and lightning fast.
-    icon: 📦
+    icon: 
   - title: Built for Resilience
     details: Exponential backoff retries for 429/5xx errors, auto-generated idempotency keys, and AbortController timeouts.
-    icon: 🛡️
+    icon: 
   - title: 100% Type Safe
     details: Written in strict TypeScript. Every request and response payload is strongly typed for perfect IntelliSense.
-    icon: 📘
+    icon: 
 ---
 
 ## Why use this SDK instead of a raw "fetch"?

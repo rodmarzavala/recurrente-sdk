@@ -1,6 +1,6 @@
 # @rodmarzavala/recurrente-sdk
 
-**SDK no oficial de TypeScript para la API REST de [Recurrente](https://recurrente.com) 🇬🇹**  
+**SDK no oficial de TypeScript para la API REST de [Recurrente](https://recurrente.com)**  
 Hecho en Guatemala para developers guatemaltecos — y para cualquiera que quiera cobrar en quetzales.
 
 [![npm version](https://img.shields.io/npm/v/@rodmarzavala%2Frecurrente-sdk?color=4f46e5&style=flat-square)](https://www.npmjs.com/package/@rodmarzavala/recurrente-sdk)
@@ -10,7 +10,7 @@ Hecho en Guatemala para developers guatemaltecos — y para cualquiera que quier
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-4f46e5?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Hecho en Guatemala](https://img.shields.io/badge/Hecho%20en-Guatemala%20%F0%9F%87%AC%F0%9F%87%B9-4f46e5?style=flat-square)](https://recurrente.com)
 
-> 🇵🇬 **Documentación en español e inglés:** [rodmarzavala.github.io/recurrente-sdk](https://rodmarzavala.github.io/recurrente-sdk/)
+>  **Documentación en español e inglés:** [rodmarzavala.github.io/recurrente-sdk](https://rodmarzavala.github.io/recurrente-sdk/)
 
 ---
 
@@ -20,14 +20,14 @@ Recurrente es la plataforma de pagos y suscripciones líder en Guatemala. Este S
 
 | Feature | Detalle |
 |---------|---------|
-| ⚡️ **Edge-first** | Usa solo Web APIs estándar — funciona en Cloudflare Workers, Vercel Edge, Deno, Bun y Node.js ≥ 18 sin cambios |
-| 📦 **Zero dependencias** | `fetch` nativo + Web Crypto API — nada en `dependencies` |
-| 🛡️ **Seguro por defecto** | Verificación de webhooks con `crypto.subtle.verify` (tiempo constante) + protección contra replay attacks (ventana 5 min) |
-| 💪 **Resiliente** | Reintentos con exponential backoff para 429 & 5xx · soporte `Retry-After` · timeout de 30s via `AbortController` |
-| 🎯 **100% tipado** | TypeScript estricto en todo — `noImplicitAny`, sin `any` |
-| 🔑 **Idempotente** | `Idempotency-Key` generado automáticamente y reutilizado en reintentos — sin cobros dobles |
-| 📋 **Paginación** | Todos los endpoints de lista retornan `Page<T>` con helpers `pageIterator()` y `autoPagingToArray()` |
-| 🚀 **Developer Experience** | Incluye un Webhook Forwarder nativo (CLI) para recibir y re-firmar eventos localmente sin usar `ngrok`. Ahorra horas de setup y depuración en `localhost`. |
+|  **Edge-first** | Usa solo Web APIs estándar — funciona en Cloudflare Workers, Vercel Edge, Deno, Bun y Node.js ≥ 18 sin cambios |
+|  **Zero dependencias** | `fetch` nativo + Web Crypto API — nada en `dependencies` |
+|  **Seguro por defecto** | Verificación de webhooks con `crypto.subtle.verify` (tiempo constante) + protección contra replay attacks (ventana 5 min) |
+|  **Resiliente** | Reintentos con exponential backoff para 429 & 5xx · soporte `Retry-After` · timeout de 30s via `AbortController` |
+|  **100% tipado** | TypeScript estricto en todo — `noImplicitAny`, sin `any` |
+|  **Idempotente** | `Idempotency-Key` generado automáticamente y reutilizado en reintentos — sin cobros dobles |
+|  **Paginación** | Todos los endpoints de lista retornan `Page<T>` con helpers `pageIterator()` y `autoPagingToArray()` |
+|  **Developer Experience** | Incluye un Webhook Forwarder nativo (CLI) para recibir y re-firmar eventos localmente sin usar `ngrok`. Ahorra horas de setup y depuración en `localhost`. |
 
 ---
 
@@ -45,7 +45,7 @@ yarn add @rodmarzavala/recurrente-sdk
 
 ---
 
-## 🪄 Asistente de Configuración (CLI)
+##  Asistente de Configuración (CLI)
 
 El SDK incluye una herramienta de línea de comandos (CLI) interactiva para configurar tu proyecto en segundos. ¡Genera tus variables de entorno y tu ruta de webhooks (ej. para Next.js o Express) automáticamente!
 
@@ -53,7 +53,7 @@ El SDK incluye una herramienta de línea de comandos (CLI) interactiva para conf
 npx @rodmarzavala/recurrente-sdk init
 ```
 
-## 🚀 Webhook Forwarder Local (Efecto Stripe CLI)
+##  Webhook Forwarder Local (Efecto Stripe CLI)
 
 Desarrollar webhooks en local no debería ser doloroso. No instales `ngrok` ni pagues por túneles. La CLI del SDK incluye un forwarder que envía los eventos de Recurrente directo a tu `localhost`, ¡y refirma criptográficamente el payload para que tu código local no falle al verificar las firmas!
 
@@ -233,7 +233,7 @@ const recurrente = new Recurrente({
 
 ## Documentación
 
-📖 **[rodmarzavala.github.io/recurrente-sdk](https://rodmarzavala.github.io/recurrente-sdk/)** — Documentación completa en español e inglés.
+ **[rodmarzavala.github.io/recurrente-sdk](https://rodmarzavala.github.io/recurrente-sdk/)** — Documentación completa en español e inglés.
 
 | Guía | Descripción |
 |------|-------------|
@@ -262,7 +262,7 @@ const recurrente = new Recurrente({
 
 ¡Todas las contribuciones son bienvenidas! Ya sea un fix de bug, un módulo nuevo, o una typo en los docs.
 
-👉 Lee [CONTRIBUTING.md](./CONTRIBUTING.md) para empezar.
+ Lee [CONTRIBUTING.md](./CONTRIBUTING.md) para empezar.
 
 ```bash
 git clone https://github.com/rodmarzavala/recurrente-sdk.git

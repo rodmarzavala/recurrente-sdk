@@ -16,16 +16,16 @@ hero:
 features:
   - title: 100% Edge-First
     details: Funciona perfectamente en Vercel Edge, Cloudflare Workers, Next.js, Astro y Bun. Olvídate de los errores de "crypto" en Node.js.
-    icon: ⚡️
+    icon: 
   - title: Cero Dependencias
     details: Usa fetch nativo y Web Crypto API. Tu bundle se mantiene liviano, seguro y rapidísimo.
-    icon: 📦
+    icon: 
   - title: Cero Cobros Dobles (Resiliente)
     details: Trae idempotencia automática y reintentos (backoff) en caso de fallos de red intermitentes.
-    icon: 🛡️
+    icon: 
   - title: Tipado Estricto
     details: Escrito en TypeScript. VSCode te va a autocompletar todo, evitándote errores HTTP 422.
-    icon: 📘
+    icon: 
 ---
 
 ## ¿Por qué usar este SDK y no un "fetch" básico?
